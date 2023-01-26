@@ -1,63 +1,70 @@
-const { BrowserWindow } = require("electron");
-const axios = require("axios");
-const url = require("url");
-const qs = require("querystring");
-require("dotenv").config();
+import { BrowserWindow } from "electron";
+import axios from "axios";
+import url from "url";
+import qs from "querystring";
+import "dotenv/config";
 
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env;
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env as Record<
+  string,
+  string
+>;
+
 const AUTH_KEY = "auth";
-
 const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${SPOTIFY_REDIRECT_URI}&scope=user-read-email+user-read-private+user-read-playback-state+user-modify-playback-state+user-read-currently-playing+user-read-playback-position&response_type=code`;
 
-let authWindow = null;
+let authWindow: BrowserWindow | null = null;
 
-const loadTokens = () => {
+interface Tokens {
+  access_token: string;
+  token_type: "Bearer";
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+}
+
+const loadTokens = (): Tokens | undefined => {
   const raw = localStorage.getItem(AUTH_KEY);
   if (!raw) return undefined;
   return JSON.parse(raw);
 };
 
-const storeTokens = (tokens) => {
+const storeTokens = (tokens: Tokens) => {
   localStorage.setItem(AUTH_KEY, JSON.stringify(tokens));
 };
 
-const getAccessTokens = async (authToken) => {
+const getAccessTokens = async (authToken: string): Promise<Tokens | undefined> => {
   const response = await axios.post(
     "https://accounts.spotify.com/api/token",
-    qs.stringify(
-      {
-        grant_type: "authorization_code",
-        code: authToken,
-        redirect_uri: SPOTIFY_REDIRECT_URI,
+    qs.stringify({
+      grant_type: "authorization_code",
+      code: authToken,
+      redirect_uri: SPOTIFY_REDIRECT_URI,
+    }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Basic " + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`),
       },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "Basic " + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`),
-        },
-      }
-    )
+    }
   );
 
   if (response.status >= 400) return undefined;
   return response.data;
 };
 
-const refreshAccessTokens = async (refreshToken) => {
+const refreshAccessTokens = async (refreshToken: string): Promise<Tokens | undefined> => {
   const response = await axios.post(
     "https://accounts.spotify.com/api/token",
-    qs.stringify(
-      {
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
+    qs.stringify({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Basic " + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`),
       },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "Basic " + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`),
-        },
-      }
-    )
+    }
   );
 
   if (response.status >= 400) return undefined;
@@ -77,7 +84,6 @@ const createAuthWindow = () => {
     height: 800,
     webPreferences: {
       nodeIntegration: false,
-      enableRemoteModule: false,
     },
   });
 
@@ -97,7 +103,7 @@ const createAuthWindow = () => {
   });
 
   authWindow.on("closed", () => {
-    win = null;
+    authWindow = null;
   });
 };
 
@@ -107,7 +113,7 @@ const destroyAuthWindow = () => {
   authWindow = null;
 };
 
-module.exports = {
+export {
   createAuthWindow,
   destroyAuthWindow,
   loadTokens,

@@ -35,7 +35,7 @@ const songStates = {
   daftPunk: {
     id: "a",
     title: "Give Life Back To Music",
-    artists: ["Daft Punk", "You Mum"],
+    artists: ["Daft Punk"],
     albumCover: "/ram_album_art.jpg",
     splash: "/ram_splash_art.jpg",
     length: 275,
