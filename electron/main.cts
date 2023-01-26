@@ -1,9 +1,8 @@
 import path from "path";
 import { app, BrowserWindow, WebPreferences } from "electron";
-import { createAuthWindow, loadTokens } from "./auth";
-import remote from "@electron/remote/main";
+// import remote from "@electron/remote/main";
 
-remote.initialize();
+// remote.initialize();
 
 const createWindow = () => {
   console.log("Create window");
@@ -30,11 +29,6 @@ const createWindow = () => {
 
 app.on("ready", () => {
   createWindow();
-  const tokens = loadTokens();
-  if (tokens) {
-  } else {
-  }
-  createAuthWindow();
 });
 
 app.on("window-all-closed", () => {
