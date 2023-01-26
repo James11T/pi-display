@@ -6,7 +6,6 @@
 
 html {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
-  cursor: none;
   color: white;
 }
 
@@ -28,6 +27,7 @@ body {
   box-sizing: border-box;
   font: inherit;
   color: inherit;
+  cursor: none;
 }
 
 #root {
