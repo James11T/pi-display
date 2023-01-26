@@ -10,8 +10,8 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1480,
     height: 320,
-    frame: false,
-    // fullscreen: true,
+    // frame: false,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
