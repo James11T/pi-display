@@ -1,0 +1,28 @@
+.track {
+  $spacing: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+  padding: 0 $spacing;
+
+  span {
+    color: rgb(221, 221, 221);
+    font-weight: 300;
+    font-size: 14px;
+  }
+
+  &__bar {
+    width: 100%;
+    height: 6px;
+    background-color: rgb(72, 72, 72);
+    border-radius: 100vh;
+    overflow: hidden;
+  }
+
+  &__progress {
+    width: calc(clamp(0, var(--progress, 0), 1) * 100%);
+    height: 100%;
+    background-color: #b9b9b9;
+  }
+}

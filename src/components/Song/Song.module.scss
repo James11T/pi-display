@@ -1,0 +1,18 @@
+.song {
+  display: flex;
+  gap: 10px;
+
+  &__album_art {
+    height: 40px;
+    border-radius: 4px;
+  }
+
+  &__title {
+    font-size: 16px;
+  }
+
+  &__artists {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 65%);
+  }
+}

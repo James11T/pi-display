@@ -1,0 +1,45 @@
+@font-face {
+  font-family: "Montserrat";
+
+  src: url("/Montserrat.ttf") format("truetype");
+}
+
+html {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+
+  color: white;
+}
+
+body {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100vh;
+  max-height: 100vh;
+
+  overflow: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font: inherit;
+  color: inherit;
+}
+
+#root {
+  height: 100%;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
