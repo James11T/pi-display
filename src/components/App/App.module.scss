@@ -131,10 +131,6 @@ $up-next-width: 380px;
         width: 30px;
       }
 
-      &:hover {
-        filter: drop-shadow(0 0 3px currentColor);
-      }
-
       &:active {
         filter: drop-shadow(0 0 6px currentColor);
       }
