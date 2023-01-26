@@ -33,6 +33,16 @@ $up-next-width: 380px;
     gap: 10px;
     overflow-y: scroll;
     flex: 1 1 100%;
+    margin-right: 4px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 20%);
+      border-radius: 100vw;
+    }
   }
 
   &__no-queue {
