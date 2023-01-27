@@ -35,7 +35,7 @@ const APIFetch = async <T>(
     body: encodedBody,
     method,
   });
-  const data = await response.json();
+  const data = response.status === 204 ? null : await response.json();
   if (!response.ok) throw new HTTPError(data.message, response.status);
   return data;
 };

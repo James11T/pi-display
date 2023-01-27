@@ -54,13 +54,13 @@ const App = () => {
             onClick={spotify.toggleShuffle}>
             <ShuffleIcon />
           </button>
-          <button>
+          <button onClick={spotify.skipPrevious}>
             <BackIcon />
           </button>
           <button onClick={spotify.togglePlaying} className={styles["controls__play-button"]}>
             {spotify.playbackState?.is_playing ? <PauseIcon /> : <PlayIcon />}
           </button>
-          <button>
+          <button onClick={spotify.skipNext}>
             <NextIcon />
           </button>
           <button
