@@ -21,7 +21,7 @@ const App = () => {
       <div
         className={styles["now-playing"]}
         style={{
-          "--album-art": spotify.playbackState
+          "--album-art": spotify.playbackState?.item
             ? url(spotify.playbackState.item.album.images[0].url)
             : "",
           "--splash-art": spotify.currentArtist ? url(spotify.currentArtist.images[0].url) : "",
@@ -31,9 +31,9 @@ const App = () => {
         <div className={styles["now-playing__details"]}>
           {/* contains pseudo element for background image */}
           <div className={styles["now-playing__title-text"]}>
-            <h1>{spotify.playbackState?.item.name ?? "Nothing"}</h1>
+            <h1>{spotify.playbackState?.item?.name ?? "Nothing"}</h1>
             <h2>
-              {spotify.playbackState?.item.artists.map((artist) => artist.name).join(", ") ??
+              {spotify.playbackState?.item?.artists.map((artist) => artist.name).join(", ") ??
                 "Nobody"}
             </h2>
           </div>
@@ -41,9 +41,9 @@ const App = () => {
       </div>
       <div className={styles["controls"]}>
         <Track
-          length={(spotify.playbackState?.item.duration_ms ?? 0) / 1000}
+          length={(spotify.playbackState?.item?.duration_ms ?? 0) / 1000}
           progress={
-            spotify.playbackState
+            spotify.playbackState?.item
               ? spotify.playbackState.progress_ms / spotify.playbackState.item.duration_ms
               : 0
           }

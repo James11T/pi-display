@@ -68,11 +68,17 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   const playbackState = useQuery("playback_state", () => getPlaybackState(accessToken), {
     refetchInterval: 1000,
     onSuccess: (data) => {
-      if (data.item.id !== currentSongId) {
+      if (data.item && data.item.id !== currentSongId) {
         queue.refetch();
       }
-      setCurrentSongId(data.item.id);
-      setCurrentArtistId(data.item.artists[0].id);
+
+      if (data.item) {
+        setCurrentSongId(data.item.id);
+        setCurrentArtistId(data.item.artists[0].id);
+      } else {
+        setCurrentSongId(null);
+        setCurrentArtistId(null);
+      }
 
       // TODO Make this not bad
       setLocalOverride((old) => {

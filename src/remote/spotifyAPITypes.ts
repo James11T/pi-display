@@ -120,7 +120,7 @@ export interface PlaybackState {
     uri: string;
   };
   progress_ms: number;
-  item: Track;
+  item?: Track;
   is_playing: boolean;
   currently_playing_type: "track" | "episode" | "ad" | "unknown";
   actions: {
