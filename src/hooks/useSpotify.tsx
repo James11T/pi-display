@@ -35,6 +35,11 @@ interface LocalState {
   is_playing?: boolean;
   shuffle_state?: boolean;
   repeat_state?: "off" | "context" | "track";
+  cycles: {
+    is_playing: number;
+    shuffle_state: number;
+    repeat_state: number;
+  };
 }
 
 const spotifyContext = React.createContext<SpotifyContext>({} as SpotifyContext);
@@ -42,10 +47,14 @@ const spotifyContext = React.createContext<SpotifyContext>({} as SpotifyContext)
 const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   const [currentSongId, setCurrentSongId] = React.useState<string | null>(null);
   const [currentArtistId, setCurrentArtistId] = React.useState<string | null>(null);
-  const [localOverride, setLocalOverride] = React.useState<LocalState>({});
+  const [localOverride, setLocalOverride] = React.useState<LocalState>({
+    cycles: { is_playing: 0, shuffle_state: 0, repeat_state: 0 },
+  });
+
+  console.log(localOverride);
 
   const setLocalOverrideKey = <K extends keyof LocalState>(key: K, value: LocalState[K]) => {
-    setLocalOverride((old) => ({ ...old, [key]: value }));
+    setLocalOverride((old) => ({ ...old, [key]: value, cycles: { ...old.cycles, [key]: 2 } }));
   };
 
   const queue = useQuery("queue", () => getQueue(accessToken), {
@@ -66,13 +75,35 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
       }
       setCurrentSongId(data.item.id);
       setCurrentArtistId(data.item.artists[0].id);
-      setLocalOverride({});
+
+      // TODO Make this not bad
+      setLocalOverride((old) => {
+        return {
+          is_playing: old.cycles.is_playing > 0 ? old.is_playing : undefined,
+          shuffle_state: old.cycles.shuffle_state > 0 ? old.shuffle_state : undefined,
+          repeat_state: old.cycles.repeat_state > 0 ? old.repeat_state : undefined,
+          cycles: {
+            is_playing: Math.max(old.cycles.is_playing - 1, 0),
+            shuffle_state: Math.max(old.cycles.shuffle_state - 1, 0),
+            repeat_state: Math.max(old.cycles.repeat_state - 1, 0),
+          },
+        };
+      });
     },
   });
 
+  const playbackStateLocal = playbackState.data
+    ? {
+        ...playbackState.data,
+        is_playing: localOverride.is_playing ?? playbackState.data.is_playing,
+        shuffle_state: localOverride.shuffle_state ?? playbackState.data.shuffle_state,
+        repeat_state: localOverride.repeat_state ?? playbackState.data.repeat_state,
+      }
+    : undefined;
+
   const handleTogglePlaying = () => {
-    if (!playbackState.data) return;
-    if (playbackState.data.is_playing) {
+    if (!playbackStateLocal) return;
+    if (playbackStateLocal.is_playing) {
       pausePlayback(accessToken);
       setLocalOverrideKey("is_playing", false);
     } else {
@@ -82,8 +113,8 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   };
 
   const handleToggleShuffle = () => {
-    if (!playbackState.data) return;
-    const isShuffling = !playbackState.data.shuffle_state;
+    if (!playbackStateLocal) return;
+    const isShuffling = !playbackStateLocal.shuffle_state;
     toggleShuffle(accessToken, isShuffling);
     setLocalOverrideKey("shuffle_state", isShuffling);
   };
@@ -97,10 +128,10 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   };
 
   const stepRepeatState = () => {
-    if (!playbackState.data) return;
+    if (!playbackStateLocal) return;
     const newState =
       REPEAT_STATES[
-        (REPEAT_STATES.indexOf(playbackState.data.repeat_state) + 1) % REPEAT_STATES.length
+        (REPEAT_STATES.indexOf(playbackStateLocal.repeat_state) + 1) % REPEAT_STATES.length
       ];
     setRepeatMode(accessToken, newState);
     setLocalOverrideKey("repeat_state", newState);
@@ -109,14 +140,7 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   return (
     <spotifyContext.Provider
       value={{
-        playbackState: playbackState.data
-          ? {
-              ...playbackState.data,
-              is_playing: localOverride.is_playing ?? playbackState.data.is_playing,
-              shuffle_state: localOverride.shuffle_state ?? playbackState.data.shuffle_state,
-              repeat_state: localOverride.repeat_state ?? playbackState.data.repeat_state,
-            }
-          : undefined,
+        playbackState: playbackStateLocal,
         queue: queue.data,
         currentArtist: artist.data,
         togglePlaying: handleTogglePlaying,
