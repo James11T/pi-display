@@ -61,6 +61,19 @@ const Index = () => {
     if (tokens.access_token_eol < Number(new Date())) refreshTokens();
   }, [refreshTokens, tokens?.access_token_eol]);
 
+  React.useEffect(() => {
+    if (!tokens?.access_token_eol) return;
+    const intervalID = window.setInterval(() => {
+      const accessTokenTTL = tokens.access_token_eol - Number(new Date());
+      // If token expires in less than 5 mins then refresh it
+      if (accessTokenTTL < 5 * 60 * 1000) {
+        refreshTokens();
+      }
+    }, 60 * 1000);
+
+    return () => window.clearInterval(intervalID);
+  }, [refreshTokens, tokens?.access_token_eol]);
+
   return (
     <QueryClientProvider client={queryClient}>
       {tokens && (
