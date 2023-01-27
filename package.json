@@ -7,18 +7,12 @@
   "homepage": "./",
   "scripts": {
     "dev": "vite",
-    "build-electron": "tsc --project tsconfig.electron.json",
-    "build": "npm run build-electron && tsc && vite build",
-    "preview": "vite preview",
-    "electron:serve": "npm run build-electron && concurrently -k \"npm:dev\" \"npm:electron:start\"",
-    "electron:build": "npm run build && electron-builder -c.extraMetadata.main=electron/dist/main.cjs",
-    "electron:start": "wait-on tcp:5173 && electron . --enable-touch-events"
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.9",
     "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
-    "node-fetch": "^3.3.0",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -32,14 +26,9 @@
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
     "@vitejs/plugin-react": "^3.0.0",
-    "concurrently": "^7.6.0",
-    "cross-env": "^7.0.3",
-    "electron": "^22.0.3",
-    "electron-builder": "^23.6.0",
     "eslint": "^8.32.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "^4.9.3",
-    "vite": "^4.0.0",
-    "wait-on": "^7.0.1"
+    "vite": "^4.0.0"
   }
 }

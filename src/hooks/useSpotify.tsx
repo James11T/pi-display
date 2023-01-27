@@ -51,8 +51,6 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
     cycles: { is_playing: 0, shuffle_state: 0, repeat_state: 0 },
   });
 
-  console.log(localOverride);
-
   const setLocalOverrideKey = <K extends keyof LocalState>(key: K, value: LocalState[K]) => {
     setLocalOverride((old) => ({ ...old, [key]: value, cycles: { ...old.cycles, [key]: 2 } }));
   };

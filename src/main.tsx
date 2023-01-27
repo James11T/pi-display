@@ -50,7 +50,8 @@ const Index = () => {
     const loadedTokens = window.localStorage.getItem("auth");
     const parsedTokens = loadedTokens ? JSON.parse(loadedTokens) : undefined;
     if (!parsedTokens) {
-      getAccessTokens(import.meta.env.VITE_SPOTIFY_AUTH_TOKEN).then(handleNewTokens);
+      const authToken = prompt("Enter Spotify auth token") as string;
+      getAccessTokens(authToken).then(handleNewTokens);
     } else {
       setTokens(parsedTokens);
     }
