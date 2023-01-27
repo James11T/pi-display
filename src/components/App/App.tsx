@@ -1,3 +1,4 @@
+import React from "react";
 import Track from "../Track/Track";
 import Song from "../Song/Song";
 import styles from "./App.module.scss";
@@ -16,6 +17,10 @@ const url = (value: string) => `url(${value})`;
 const App = () => {
   const spotify = useSpotify();
 
+  React.useEffect(() => {
+    document.body.requestFullscreen();
+  });
+
   return (
     <div className={styles["app"]}>
       <div
@@ -24,7 +29,10 @@ const App = () => {
           "--album-art": spotify.playbackState?.item
             ? url(spotify.playbackState.item.album.images[0].url)
             : "",
-          "--splash-art": spotify.currentArtist ? url(spotify.currentArtist.images[0].url) : "",
+          "--splash-art":
+            spotify.currentArtist && spotify.playbackState?.item
+              ? url(spotify.currentArtist.images[0].url)
+              : "",
         }}>
         <div className={styles["now-playing__album-art"]}></div>
         {/* now-playing__album-art sets background image */}
