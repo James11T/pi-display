@@ -11,32 +11,26 @@ import { ReactComponent as ShuffleIcon } from "../../assets/icons/shuffle.svg";
 import { ReactComponent as RepeatAllIcon } from "../../assets/icons/repeat_all.svg";
 import { ReactComponent as RepeatOneIcon } from "../../assets/icons/repeat_one.svg";
 import { useSpotify } from "../../hooks/useSpotify";
-
-const url = (value: string) => `url(${value})`;
+import BufferedImage from "../BufferedImage/BufferedImage";
 
 const App = () => {
   const spotify = useSpotify();
 
   React.useEffect(() => {
     document.body.requestFullscreen();
-  });
+  }, []);
 
   return (
     <div className={styles["app"]}>
-      <div
-        className={styles["now-playing"]}
-        style={{
-          "--album-art": spotify.playbackState?.item
-            ? url(spotify.playbackState.item.album.images[0].url)
-            : "",
-          "--splash-art":
-            spotify.currentArtist && spotify.playbackState?.item
-              ? url(spotify.currentArtist.images[0].url)
-              : "",
-        }}>
-        <div className={styles["now-playing__album-art"]}></div>
+      <div className={styles["now-playing"]}>
+        <BufferedImage
+          className={styles["now-playing__album-art"]}
+          url={spotify.playbackState?.item?.album.images[0].url}></BufferedImage>
         {/* now-playing__album-art sets background image */}
-        <div className={styles["now-playing__details"]}>
+        <BufferedImage
+          className={styles["now-playing__details"]}
+          url={spotify.playbackState?.item ? spotify.currentArtist?.images[0].url : undefined}
+          fullOpacity={0.4}>
           {/* contains pseudo element for background image */}
           <div className={styles["now-playing__title-text"]}>
             <h1>{spotify.playbackState?.item?.name ?? "Nothing"}</h1>
@@ -45,7 +39,7 @@ const App = () => {
                 "Nobody"}
             </h2>
           </div>
-        </div>
+        </BufferedImage>
       </div>
       <div className={styles["controls"]}>
         <Track
