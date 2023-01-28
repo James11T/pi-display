@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "./components";
+import App from "./components/App/App";
 import { SpotifyProvider } from "./hooks/useSpotify";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
