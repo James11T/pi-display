@@ -1,17 +1,20 @@
-import React from "react";
 import Track from "../Track/Track";
 import Song from "../Song/Song";
 import styles from "./App.module.scss";
 import cn from "clsx";
-import { ReactComponent as BackIcon } from "../../assets/icons/back.svg";
-import { ReactComponent as NextIcon } from "../../assets/icons/next.svg";
-import { ReactComponent as PlayIcon } from "../../assets/icons/play.svg";
-import { ReactComponent as PauseIcon } from "../../assets/icons/pause.svg";
-import { ReactComponent as ShuffleIcon } from "../../assets/icons/shuffle.svg";
-import { ReactComponent as RepeatAllIcon } from "../../assets/icons/repeat_all.svg";
-import { ReactComponent as RepeatOneIcon } from "../../assets/icons/repeat_one.svg";
+import {
+  BackIcon,
+  NextIcon,
+  PlayIcon,
+  PauseIcon,
+  ShuffleIcon,
+  RepeatAllIcon,
+  RepeatOneIcon,
+} from "../../icons";
+
 import { useSpotify } from "../../hooks/useSpotify";
 import BufferedImage from "../BufferedImage/BufferedImage";
+import Volume from "../Volume/Volume";
 
 const App = () => {
   const spotify = useSpotify();
@@ -35,6 +38,7 @@ const App = () => {
                 "Nobody"}
             </h2>
           </div>
+          <Volume value={(spotify.playbackState?.device.volume_percent ?? 0) / 100} />
         </BufferedImage>
       </div>
       <div className={styles["controls"]}>

@@ -1,0 +1,10 @@
+export { ReactComponent as BackIcon } from "./assets/icons/back.svg";
+export { ReactComponent as NextIcon } from "./assets/icons/next.svg";
+export { ReactComponent as PlayIcon } from "./assets/icons/play.svg";
+export { ReactComponent as PauseIcon } from "./assets/icons/pause.svg";
+export { ReactComponent as ShuffleIcon } from "./assets/icons/shuffle.svg";
+export { ReactComponent as RepeatAllIcon } from "./assets/icons/repeat_all.svg";
+export { ReactComponent as RepeatOneIcon } from "./assets/icons/repeat_one.svg";
+export { ReactComponent as VolumeOffIcon } from "./assets/icons/volume_off.svg";
+export { ReactComponent as VolumeLowIcon } from "./assets/icons/volume_low.svg";
+export { ReactComponent as VolumeHighIcon } from "./assets/icons/volume_high.svg";

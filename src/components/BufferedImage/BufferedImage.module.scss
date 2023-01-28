@@ -2,6 +2,10 @@
   position: relative;
   background-color: black;
 
+  & > * {
+    z-index: 1;
+  }
+
   &::before {
     position: absolute;
     background-size: cover;
