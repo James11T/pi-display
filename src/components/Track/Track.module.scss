@@ -25,5 +25,6 @@
     width: calc(clamp(0, var(--progress, 0), 1) * 100%);
     height: 100%;
     background-color: #b9b9b9;
+    transition: width 300ms;
   }
 }
