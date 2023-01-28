@@ -16,10 +16,6 @@ import BufferedImage from "../BufferedImage/BufferedImage";
 const App = () => {
   const spotify = useSpotify();
 
-  React.useEffect(() => {
-    document.body.requestFullscreen();
-  }, []);
-
   return (
     <div className={styles["app"]}>
       <div className={styles["now-playing"]}>
