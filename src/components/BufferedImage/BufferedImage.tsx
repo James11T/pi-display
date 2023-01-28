@@ -32,6 +32,7 @@ const BufferedImage = ({
     const newImage = new Image();
 
     const resolve = () => {
+      // Make sure that URL hasn't changed during transition
       if (url !== newImage.src) return;
       setCurrentUrl(url);
       setIsReady(true);
@@ -43,7 +44,6 @@ const BufferedImage = ({
     }, transition);
 
     newImage.onload = () => {
-      // Make sure that URL hasn't changed during loading
       hasLoaded = true;
       if (hasTransitioned) resolve();
     };
