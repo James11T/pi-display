@@ -1,3 +1,4 @@
+import React from "react";
 import Track from "../Track/Track";
 import Song from "../Song/Song";
 import styles from "./App.module.scss";
@@ -11,16 +12,35 @@ import {
   RepeatAllIcon,
   RepeatOneIcon,
 } from "../../icons";
-
 import { useSpotify } from "../../hooks/useSpotify";
 import BufferedImage from "../BufferedImage/BufferedImage";
 import Volume from "../Volume/Volume";
 
+const FULLSCREEN_TIMEOUT = 20_000;
+
 const App = () => {
   const spotify = useSpotify();
+  const [isSmall, setIsSmall] = React.useState(true);
+  const smallTimeoutId = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    const interactionHandler = () => {
+      smallTimeoutId.current && window.clearTimeout(smallTimeoutId.current);
+      setIsSmall(false);
+      smallTimeoutId.current = window.setTimeout(() => setIsSmall(true), FULLSCREEN_TIMEOUT);
+    };
+
+    window.addEventListener("click", interactionHandler);
+    window.addEventListener("touchstart", interactionHandler);
+
+    return () => {
+      window.removeEventListener("click", interactionHandler);
+      window.removeEventListener("touchstart", interactionHandler);
+    };
+  }, []);
 
   return (
-    <div className={styles["app"]}>
+    <div className={cn(styles["app"], isSmall && styles["app--small"])}>
       <div className={styles["now-playing"]}>
         <BufferedImage
           className={styles["now-playing__album-art"]}

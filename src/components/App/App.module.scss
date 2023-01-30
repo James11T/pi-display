@@ -1,5 +1,6 @@
 $controls-height: 100px;
 $up-next-width: 380px;
+$animate-time: 300ms;
 
 .app {
   display: grid;
@@ -9,6 +10,14 @@ $up-next-width: 380px;
   max-height: 100%;
   background-color: rgb(15, 15, 15);
   filter: brightness(0.6);
+  transition: grid-template-columns $animate-time, grid-template-rows $animate-time,
+    font-size $animate-time;
+
+  &--small {
+    grid-template-columns: 1fr 0;
+    grid-template-rows: 1fr 0;
+    font-size: 1.8rem;
+  }
 
   .controls {
     grid-row: 2;
@@ -78,12 +87,12 @@ $up-next-width: 380px;
     padding: 10px;
 
     h1 {
-      font-size: 36px;
+      font-size: 2.8em;
       font-weight: 400;
     }
 
     h2 {
-      font-size: 24px;
+      font-size: 1.8em;
       color: rgba(255, 255, 255, 65%);
       font-weight: 300;
     }
