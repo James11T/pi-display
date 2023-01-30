@@ -9,6 +9,11 @@ $up-next-width: 380px;
   max-height: 100%;
   background-color: rgb(15, 15, 15);
   filter: brightness(0.6);
+  transition: filter 300ms;
+
+  &--dimmed {
+    filter: brightness(0.2);
+  }
 
   .controls {
     grid-row: 2;

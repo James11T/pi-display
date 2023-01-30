@@ -112,7 +112,7 @@ export interface PlaybackState {
   repeat_state: "off" | "track" | "context";
   timestamp: number;
   context?: {
-    type: "string";
+    type: "artist" | "playlist" | "album" | "show" | "collection" | string;
     href: string;
     external_urls: {
       spotify: string;

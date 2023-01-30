@@ -1,3 +1,4 @@
+import React from "react";
 import Track from "../Track/Track";
 import Song from "../Song/Song";
 import styles from "./App.module.scss";
@@ -18,9 +19,24 @@ import Volume from "../Volume/Volume";
 
 const App = () => {
   const spotify = useSpotify();
+  const [isIdle, setIsIdle] = React.useState(false);
+  const idleTimeoutId = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    if (!spotify.playbackState?.item?.name) {
+      idleTimeoutId.current = window.setTimeout(() => setIsIdle(true), 20_000);
+    } else {
+      setIsIdle(false);
+      idleTimeoutId.current && window.clearTimeout(idleTimeoutId.current);
+    }
+
+    return () => {
+      idleTimeoutId.current && window.clearTimeout(idleTimeoutId.current);
+    };
+  }, [spotify.playbackState?.item?.name]);
 
   return (
-    <div className={styles["app"]}>
+    <div className={cn(styles["app"], isIdle && styles["app--dimmed"])}>
       <div className={styles["now-playing"]}>
         <BufferedImage
           className={styles["now-playing__album-art"]}
@@ -32,10 +48,9 @@ const App = () => {
           fullOpacity={0.4}>
           {/* contains pseudo element for background image */}
           <div className={styles["now-playing__title-text"]}>
-            <h1>{spotify.playbackState?.item?.name ?? "Nothing"}</h1>
+            <h1>{spotify.playbackState?.item?.name ?? ""}</h1>
             <h2>
-              {spotify.playbackState?.item?.artists.map((artist) => artist.name).join(", ") ??
-                "Nobody"}
+              {spotify.playbackState?.item?.artists.map((artist) => artist.name).join(", ") ?? ""}
             </h2>
           </div>
           <Volume value={(spotify.playbackState?.device.volume_percent ?? 0) / 100} />
@@ -82,7 +97,7 @@ const App = () => {
         <h1>Next Up</h1>
         <div className={styles["up-next__songs"]}>
           {spotify.queue &&
-            spotify.queue.queue.map((song, index) => (
+            spotify.queue.map((song, index) => (
               <Song
                 key={`${index}__${song.id}`}
                 title={song.name}
@@ -90,10 +105,9 @@ const App = () => {
                 icon={song.album.images[0].url}
               />
             ))}
-          {!spotify.queue ||
-            (spotify.queue.queue.length === 0 && (
-              <span className={styles["up-next__no-queue"]}>Nothing...</span>
-            ))}
+          {(!spotify.queue || spotify.queue.length === 0) && (
+            <span className={styles["up-next__no-queue"]}>Nothing...</span>
+          )}
         </div>
       </div>
     </div>

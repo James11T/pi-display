@@ -17,7 +17,7 @@ const REPEAT_STATES = ["off", "context", "track"] as const;
 
 interface SpotifyContext {
   playbackState?: PlaybackState;
-  queue?: Queue;
+  queue?: Queue["queue"];
   currentArtist?: HydratedArtist;
   togglePlaying: () => void;
   stepRepeatState: () => void;
@@ -42,6 +42,11 @@ interface LocalState {
   };
 }
 
+const isQueuePossible = (playbackState: PlaybackState | undefined | null) =>
+  playbackState &&
+  playbackState.context &&
+  ["artist", "playlist", "album", "collection"].includes(playbackState.context.type);
+
 const spotifyContext = React.createContext<SpotifyContext>({} as SpotifyContext);
 
 const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
@@ -56,7 +61,7 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   };
 
   const queue = useQuery("queue", () => getQueue(accessToken), {
-    refetchInterval: 10_000,
+    enabled: false,
   });
 
   const artist = useQuery(
@@ -69,7 +74,7 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
     refetchInterval: 1000,
     onSuccess: (data) => {
       if (!data) return;
-      if (data.item && data.item.id !== currentSongId) {
+      if (data.item && data.item.id !== currentSongId && isQueuePossible(data)) {
         queue.refetch();
       }
 
@@ -146,7 +151,7 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
     <spotifyContext.Provider
       value={{
         playbackState: playbackStateLocal,
-        queue: queue.data,
+        queue: queue.data && isQueuePossible(playbackState.data) ? queue.data.queue : undefined,
         currentArtist: artist.data,
         togglePlaying: handleTogglePlaying,
         stepRepeatState,
