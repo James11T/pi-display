@@ -4,8 +4,8 @@ $animate-time: 300ms;
 
 .app {
   display: grid;
-  grid-template-columns: 1fr $up-next-width;
-  grid-template-rows: 1fr $controls-height;
+  grid-template-columns: 1fr 0px;
+  grid-template-rows: 1fr 0px;
   height: 100%;
   max-height: 100%;
   background-color: rgb(15, 15, 15);
@@ -13,9 +13,9 @@ $animate-time: 300ms;
   transition: grid-template-columns $animate-time, grid-template-rows $animate-time,
     font-size $animate-time;
 
-  &--small {
-    grid-template-columns: 1fr 0;
-    grid-template-rows: 1fr 0;
+  &--full {
+    grid-template-columns: 1fr $up-next-width;
+    grid-template-rows: 1fr $controls-height;
     font-size: 1.8rem;
   }
 

@@ -40,7 +40,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className={cn(styles["app"], isSmall && styles["app--small"])}>
+    <div className={cn(styles["app"], !isSmall && styles["app--full"])}>
       <div className={styles["now-playing"]}>
         <BufferedImage
           className={styles["now-playing__album-art"]}
