@@ -45,7 +45,7 @@ const refreshAccessTokens = async (refreshToken: string) => {
 };
 
 const getPlaybackState = async (accessToken: string) => {
-  const response = await API.get<PlaybackState>("https://api.spotify.com/v1/me/player", {
+  const response = await API.get<PlaybackState | null>("https://api.spotify.com/v1/me/player", {
     accessToken,
   });
 

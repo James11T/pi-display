@@ -68,6 +68,7 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
   const playbackState = useQuery("playback_state", () => getPlaybackState(accessToken), {
     refetchInterval: 1000,
     onSuccess: (data) => {
+      if (!data) return;
       if (data.item && data.item.id !== currentSongId) {
         queue.refetch();
       }
