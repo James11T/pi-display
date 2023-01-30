@@ -129,12 +129,16 @@ const SpotifyProvider = ({ accessToken, children }: SpotifyProviderProps) => {
     setLocalOverrideKey("shuffle_state", isShuffling);
   };
 
+  const refetchPlaybackDelayed = (delay = 350) => {
+    window.setTimeout(() => playbackState.refetch(), delay);
+  };
+
   const handleSkipNext = () => {
-    skipNext(accessToken);
+    skipNext(accessToken).then(() => refetchPlaybackDelayed(300));
   };
 
   const handleSkipPrevious = () => {
-    skipPrevious(accessToken);
+    skipPrevious(accessToken).then(() => refetchPlaybackDelayed(300));
   };
 
   const stepRepeatState = () => {
