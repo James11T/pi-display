@@ -12,7 +12,6 @@ import {
   RepeatAllIcon,
   RepeatOneIcon,
 } from "../../icons";
-
 import { useSpotify } from "../../hooks/useSpotify";
 import BufferedImage from "../BufferedImage/BufferedImage";
 import Volume from "../Volume/Volume";

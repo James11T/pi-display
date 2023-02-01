@@ -7,12 +7,12 @@
   padding: 10px;
   opacity: 0.75;
 
-  svg {
+  .volume__icon {
     width: 18px;
     height: 18px;
   }
 
-  &__bar {
+  .volume__bar {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -21,12 +21,12 @@
     background-color: rgba(120, 120, 120);
     border-radius: 100vw;
     overflow: hidden;
-  }
 
-  &__progress {
-    width: 100%;
-    height: calc(var(--volume) * 100%);
-    background-color: rgba(255, 255, 255);
-    transition: height 200ms;
+    .volume__progress {
+      width: 100%;
+      height: calc(var(--volume) * 100%);
+      background-color: rgba(255, 255, 255);
+      transition: height 200ms;
+    }
   }
 }

@@ -54,7 +54,7 @@ const BufferedImage = ({
 
   return (
     <div
-      className={cn(styles["img"], isReady && styles["img--show"], className)}
+      className={cn(styles["buffered-image"], isReady && styles["buffered-image--show"], className)}
       style={
         {
           ...style,

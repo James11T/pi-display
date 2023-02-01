@@ -17,13 +17,13 @@ const Track = ({ length, progress }: TrackProps) => {
 
   return (
     <div className={styles["track"]}>
-      <span>{secToTimestamp(length * progress)}</span>
+      <span className={styles["track__text"]}>{secToTimestamp(length * progress)}</span>
       <div className={styles["track__bar"]}>
         <div
           className={styles["track__progress"]}
           style={{ "--progress": progress.toFixed(4) }}></div>
       </div>
-      <span>{secToTimestamp(length)}</span>
+      <span className={styles["track__text"]}>{secToTimestamp(length)}</span>
     </div>
   );
 };

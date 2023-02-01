@@ -23,7 +23,7 @@ const Volume = ({ value }: VolumeProps) => {
       <div className={styles["volume__bar"]}>
         <div className={styles["volume__progress"]}></div>
       </div>
-      <VolumeIcon />
+      <VolumeIcon className={styles["volume__icon"]} />
     </div>
   );
 };

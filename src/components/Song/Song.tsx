@@ -9,8 +9,8 @@ interface SongProps {
 const Song = ({ icon, title, artists }: SongProps) => {
   return (
     <div className={styles["song"]}>
-      <img className={styles["song__album_art"]} src={icon} alt="album art" />
-      <div className={styles["song__details"]}>
+      <img className={styles["song__album-art"]} src={icon} alt="album art" />
+      <div>
         <div className={styles["song__title"]}>{title}</div>
         <div className={styles["song__artists"]}>{artists.join(", ")}</div>
       </div>
