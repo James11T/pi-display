@@ -1,7 +1,7 @@
 import React from "react";
 import Track from "../Track/Track";
 import Song from "../Song/Song";
-import styles from "./App.module.scss";
+import styles from "./SpotifyApp.module.scss";
 import cn from "clsx";
 import {
   BackIcon,
@@ -16,7 +16,7 @@ import { useSpotify } from "../../hooks/useSpotify";
 import BufferedImage from "../BufferedImage/BufferedImage";
 import Volume from "../Volume/Volume";
 
-const App = () => {
+const SpotifyApp = () => {
   const spotify = useSpotify();
   const [isIdle, setIsIdle] = React.useState(false);
   const idleTimeoutId = React.useRef<number | null>(null);
@@ -113,4 +113,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default SpotifyApp;
