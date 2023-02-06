@@ -1,88 +1,39 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import SpotifyApp from "./components/SpotifyApp/SpotifyApp";
-import { SpotifyProvider } from "./hooks/useSpotify";
-import { QueryClient, QueryClientProvider } from "react-query";
+import SpotifyWrapper from "./components/SpotifyWrapper/SpotifyWrapper";
+import HueApp from "./components/HueApp/HueApp";
 import "./index.css";
-import { getAccessTokens, refreshAccessTokens } from "./remote/spotify";
+import { DiscordIcon, LightbulbOnIcon, SpotifyIcon } from "./icons";
+import AppSwitcher, { App } from "./components/AppSwitcher/AppSwitcher";
 
-const queryClient = new QueryClient();
+const APP_NAMES = ["spotify", "hue", "placeholder"] as const;
+type AppName = typeof APP_NAMES[number];
 
-interface SavedTokens {
-  refresh_token: string;
-  access_token: string;
-  access_token_eol: number;
-}
-
-interface APITokens {
-  refresh_token?: string;
-  access_token: string;
-  expires_in: number;
-}
+const APPS: Record<AppName, App> = {
+  spotify: {
+    icon: SpotifyIcon,
+    component: SpotifyWrapper,
+  },
+  hue: {
+    icon: LightbulbOnIcon,
+    component: HueApp,
+  },
+  placeholder: {
+    icon: DiscordIcon,
+    component: () => <div></div>,
+  },
+};
 
 const Index = () => {
-  const [tokens, setTokens] = React.useState<SavedTokens | null>();
+  const [currentApp, setCurrentApp] = React.useState<AppName>("spotify");
 
-  const persistTokens = React.useCallback((value?: SavedTokens) => {
-    localStorage.setItem("auth", JSON.stringify(value));
-  }, []);
-
-  const handleNewTokens = React.useCallback(
-    (rawTokens: APITokens) => {
-      const newTokens = {
-        refresh_token: (rawTokens.refresh_token ?? tokens?.refresh_token) as string,
-        access_token: rawTokens.access_token,
-        access_token_eol: Number(new Date()) + rawTokens.expires_in * 1000,
-      };
-
-      setTokens(newTokens);
-      persistTokens(newTokens);
-    },
-    [persistTokens, tokens?.refresh_token]
-  );
-
-  const refreshTokens = React.useCallback(() => {
-    if (!tokens?.refresh_token) return;
-    refreshAccessTokens(tokens.refresh_token).then(handleNewTokens);
-  }, [handleNewTokens, tokens?.refresh_token]);
-
-  React.useEffect(() => {
-    const loadedTokens = window.localStorage.getItem("auth");
-    const parsedTokens = loadedTokens ? JSON.parse(loadedTokens) : undefined;
-    if (!parsedTokens) {
-      const authToken = prompt("Enter Spotify auth token") as string;
-      getAccessTokens(authToken).then(handleNewTokens);
-    } else {
-      setTokens(parsedTokens);
-    }
-  }, [handleNewTokens]);
-
-  React.useEffect(() => {
-    if (!tokens?.access_token_eol) return;
-    if (tokens.access_token_eol < Number(new Date())) refreshTokens();
-  }, [refreshTokens, tokens?.access_token_eol]);
-
-  React.useEffect(() => {
-    if (!tokens?.access_token_eol) return;
-    const intervalID = window.setInterval(() => {
-      const accessTokenTTL = tokens.access_token_eol - Number(new Date());
-      // If token expires in less than 5 mins then refresh it
-      if (accessTokenTTL < 5 * 60 * 1000) {
-        refreshTokens();
-      }
-    }, 60 * 1000);
-
-    return () => window.clearInterval(intervalID);
-  }, [refreshTokens, tokens?.access_token_eol]);
+  const AppComponent = APPS[currentApp].component;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {tokens && (
-        <SpotifyProvider accessToken={tokens.access_token}>
-          <App />
-        </SpotifyProvider>
-      )}
-    </QueryClientProvider>
+    <div className="index">
+      <AppSwitcher apps={APPS} currentApp={currentApp} onChangeApp={setCurrentApp} />
+      <AppComponent />
+    </div>
   );
 };
 

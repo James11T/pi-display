@@ -1,0 +1,104 @@
+.app {
+  height: 100%;
+  display: flex;
+  width: 100%;
+}
+
+.light {
+  position: relative;
+  display: grid;
+  place-content: center;
+  width: 100vh;
+  cursor: pointer;
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    content: "";
+    display: block;
+    width: 140%;
+    height: 140%;
+    background-image: radial-gradient(closest-side, var(--color), transparent);
+    opacity: var(--glow-opacity);
+    transition: opacity 100ms;
+    z-index: -1;
+  }
+
+  svg {
+    width: 150px;
+    height: 150px;
+    color: var(--color);
+    opacity: max(var(--glow-opacity), 0.2);
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 6px;
+  flex-grow: 1;
+
+  .details__top-bar {
+    h1 {
+      font-size: 50px;
+    }
+  }
+
+  .presets {
+    flex: 1 1 100%;
+  }
+}
+
+$button-borders: 1px solid rgba(255, 255, 255, 20%);
+
+.presets {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+
+  .presets__row {
+    display: flex;
+    flex: 1 1 100%;
+    border-bottom: $button-borders;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .presets__button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    border-right: $button-borders;
+    flex: 1 1 100%;
+    color: rgba(255, 255, 255, 80%);
+    transition: translate 50ms;
+    cursor: pointer;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:not(:disabled):active {
+      translate: 0px 2px;
+    }
+
+    svg {
+      height: 45px;
+      width: 45px;
+    }
+
+    &:disabled {
+      color: rgba(255, 255, 255, 25%);
+    }
+  }
+}

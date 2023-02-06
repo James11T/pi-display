@@ -1,0 +1,30 @@
+.app-switcher {
+  flex-shrink: 0;
+  width: 85px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: rgb(30, 30, 30);
+  border-right: 2px solid white;
+  color: rgb(130, 130, 130);
+
+  button {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+  }
+
+  svg {
+    display: block;
+    width: 45px;
+    height: 45px;
+  }
+}
+
+.button--active {
+  color: white;
+}

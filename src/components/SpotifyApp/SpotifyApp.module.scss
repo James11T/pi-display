@@ -6,9 +6,9 @@ $up-next-width: 380px;
   grid-template-columns: 1fr $up-next-width;
   grid-template-rows: 1fr $controls-height;
   height: 100%;
+  width: 100%;
   max-height: 100%;
   background-color: rgb(15, 15, 15);
-  filter: brightness(0.6);
   transition: filter 300ms;
 
   &--dimmed {
