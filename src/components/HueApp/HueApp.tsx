@@ -38,20 +38,30 @@ const HueApp = () => {
 
   const focusedLight = hue.lights.find((light) => light.id === focusedLightId);
 
-  const handleNewColor = (newColor: LightColor) => {
-    if (!focusedLight) return;
-    hue.setLight(focusedLight.id, newColor, true);
-  };
+  const handleNewColor = React.useCallback(
+    (newColor: LightColor) => {
+      if (!focusedLight?.id) return;
+      hue.setLight(focusedLight.id, newColor, true);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [focusedLight?.id, hue.setLight]
+  );
 
-  const handleNewPreset = (preset: LightingPreset) => {
-    if (!preset.color) return;
-    handleNewColor(preset.color);
-  };
+  const handleNewPreset = React.useCallback(
+    (preset: LightingPreset) => {
+      if (!preset.color) return;
+      handleNewColor(preset.color);
+    },
+    [handleNewColor]
+  );
 
-  const handleSavePreset = (presetId: PresetID) => {
-    if (!focusedLight) return;
-    setPreset(presetId, focusedLight.color);
-  };
+  const handleSavePreset = React.useCallback(
+    (presetId: PresetID) => {
+      if (!focusedLight?.color) return;
+      setPreset(presetId, focusedLight.color);
+    },
+    [focusedLight?.color, setPreset]
+  );
 
   const handleToggleOn = () => {
     if (!focusedLight) return;
@@ -72,7 +82,7 @@ const HueApp = () => {
       </div>
       <div className={styles["details"]}>
         <div className={styles["details__top-bar"]}>
-          <h1>{focusedLight?.name ?? ""}</h1>
+          <h1>{focusedLight?.name ?? " "}</h1>
         </div>
         <div className={styles["presets"]}>
           <ButtonRow

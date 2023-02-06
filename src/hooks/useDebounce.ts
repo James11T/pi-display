@@ -1,5 +1,7 @@
 import React from "react";
 
+// Provides a callback with the same parameters of the given callback
+// Ignores any calls within provided time frame of a successful call
 const useDebounce = <T extends (...args: any[]) => any>(
   cb: T,
   debounce = 300
@@ -19,6 +21,7 @@ const useDebounce = <T extends (...args: any[]) => any>(
       if (Number(new Date()) - lastRun.current > debounce) {
         return resolve();
       } else {
+        // Delay call in case of final call
         timeoutId.current = window.setTimeout(resolve, debounce);
       }
     },

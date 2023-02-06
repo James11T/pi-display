@@ -1,6 +1,7 @@
 import React from "react";
 import cn from "clsx";
 import styles from "./LongPressButton.module.scss";
+import CONFIG from "../../config";
 
 interface LongPressButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number;
@@ -10,7 +11,7 @@ interface LongPressButtonProps extends React.ComponentPropsWithoutRef<"button"> 
 }
 
 const LongPressButton = ({
-  duration = 300,
+  duration = CONFIG.longPressTime,
   children,
   onShortPress,
   onLongPress,
@@ -44,7 +45,7 @@ const LongPressButton = ({
       window.removeEventListener("touchend", onBlur);
       window.removeEventListener("blur", onBlur);
     };
-  }, [isDown]);
+  }, [isDown, onShortPress]);
 
   return (
     <button

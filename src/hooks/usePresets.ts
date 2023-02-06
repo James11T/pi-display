@@ -20,6 +20,7 @@ interface LightingPreset {
   id: string;
 }
 
+// Default presets, color can be overwritten
 const basePresets: LightingPreset[] = [
   {
     color: new LightColor(47, 0.476, 1),
@@ -90,6 +91,7 @@ const usePresets = () => {
   const [presets, setPresets] = React.useState<LightingPreset[]>(basePresets);
   const hasLoaded = React.useRef(false);
 
+  // Load preset overrides from localStorage
   React.useEffect(() => {
     const done = () => {
       hasLoaded.current = true;
@@ -107,6 +109,7 @@ const usePresets = () => {
     return done();
   }, []);
 
+  // Save presets to localStorage
   React.useEffect(() => {
     if (!hasLoaded.current) return;
 
@@ -115,16 +118,17 @@ const usePresets = () => {
       {}
     );
     localStorage.setItem("presets", JSON.stringify(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(presets)]);
 
-  const setPreset = (id: PresetID, color: LightColor) => {
+  const setPreset = React.useCallback((id: PresetID, color: LightColor) => {
     setPresets((old) =>
       old.map((preset) => {
         if (preset.id !== id) return preset;
         return { ...preset, color };
       })
     );
-  };
+  }, []);
 
   return [presets, setPreset] as const;
 };

@@ -15,6 +15,7 @@ import {
 import { useSpotify } from "../../hooks/useSpotify";
 import BufferedImage from "../BufferedImage/BufferedImage";
 import Volume from "../Volume/Volume";
+import CONFIG from "../../config";
 
 const SpotifyApp = () => {
   const spotify = useSpotify();
@@ -22,6 +23,7 @@ const SpotifyApp = () => {
   const idleTimeoutId = React.useRef<number | null>(null);
 
   React.useEffect(() => {
+    if (!CONFIG.spotify.idleDimming) return;
     if (!spotify.playbackState?.item?.name) {
       idleTimeoutId.current = window.setTimeout(() => setIsIdle(true), 20_000);
     } else {
