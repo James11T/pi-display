@@ -37,7 +37,7 @@ const ColorWheel = ({ color, onColorChange }: ColorWheelProps) => {
           (Math.PI * 2); // Bound between [0, 2pi]
 
         const degs = Math.round(angle * (180 / Math.PI)); // Hue degs 0 to 360
-        onColorChange && onColorChange(new LightColor(degs, sat, color.bri));
+        onColorChange && onColorChange(new LightColor(degs, sat, color.bri).normalise());
       }
       if (brightnessFocused && Brightness.current) {
         const newAlpha = clamp(
@@ -47,7 +47,7 @@ const ColorWheel = ({ color, onColorChange }: ColorWheelProps) => {
         onColorChange && onColorChange(new LightColor(color.hue, color.sat, newAlpha));
       }
     },
-    [wheelFocused, brightnessFocused]
+    [wheelFocused, brightnessFocused, color.hue, color.sat, color.bri, onColorChange]
   );
 
   const handleWheelClick = () => {
@@ -93,10 +93,10 @@ const ColorWheel = ({ color, onColorChange }: ColorWheelProps) => {
     };
   }, [handleMouseMove]);
 
-  let angle = (color.hue * Math.PI) / 180;
+  const angle = (color.hue * Math.PI) / 180;
   const length = color.sat / 2;
-  let pinTop = (0.5 - Math.cos(angle) * length) * 100;
-  let pinLeft = (0.5 + Math.sin(angle) * length) * 100;
+  const pinTop = (0.5 - Math.cos(angle) * length) * 100;
+  const pinLeft = (0.5 + Math.sin(angle) * length) * 100;
 
   return (
     <div className={styles["color-wheel"]}>

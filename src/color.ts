@@ -4,6 +4,8 @@ const HUE_BRI_RANGE = 254;
 
 const LOCAL_HUE_RANGE = 360;
 
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
 class LightColor {
   hue: number; // 0 to 360
   sat: number; // 0 to 1
@@ -29,6 +31,13 @@ class LightColor {
 
   css() {
     return `hsl(${this.hue}deg, ${Math.round(this.sat * 100)}%, 50%)`;
+  }
+
+  normalise() {
+    this.hue = clamp(this.hue, 0, 360);
+    this.sat = clamp(this.sat, 0, 1);
+    this.bri = clamp(this.bri, 0, 1);
+    return this;
   }
 
   static parse(input: string) {
