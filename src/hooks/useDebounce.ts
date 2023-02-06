@@ -22,7 +22,7 @@ const useDebounce = <T extends (...args: any[]) => any>(
         timeoutId.current = window.setTimeout(resolve, debounce);
       }
     },
-    [cb]
+    [cb, debounce]
   );
 
   return callback as T;
