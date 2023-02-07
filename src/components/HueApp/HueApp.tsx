@@ -2,7 +2,7 @@ import LightColor from "../../color";
 import React from "react";
 import useHue from "../../hooks/useHue";
 import usePresets, { LightingPreset, PresetID } from "../../hooks/usePresets";
-import { LightbulbOffIcon, LightbulbOnIcon } from "../../icons";
+import { LightbulbOffIcon, LightbulbOnIcon, LightbulbDisabledIcon } from "../../icons";
 import ColorWheel from "../ColorWheel/ColorWheel";
 import LongPressButton from "../LongPressButton/LongPressButton";
 import styles from "./HueApp.module.scss";
@@ -31,6 +31,20 @@ const ButtonRow = ({ presets, onSelectPreset, onSavePreset }: ButtonRowProps) =>
       ))}
     </div>
   );
+};
+
+interface LightbulbIconProps {
+  on: boolean;
+  reachable: boolean;
+}
+
+const LightbulbIcon = ({ on, reachable }: LightbulbIconProps) => {
+  if (!reachable) return <LightbulbDisabledIcon />;
+  if (on) {
+    return <LightbulbOnIcon />;
+  } else {
+    return <LightbulbOffIcon />;
+  }
 };
 
 const HueApp = () => {
@@ -79,10 +93,16 @@ const HueApp = () => {
         onClick={handleToggleOn}
         style={{
           "--color":
-            focusedLight && focusedLight.on ? focusedLight.color.css() : "rgba(255,255,255,50%)",
-          "--glow-opacity": focusedLight && focusedLight.on ? focusedLight.color.bri : 0,
+            focusedLight && focusedLight.on && focusedLight.reachable
+              ? focusedLight.color.css()
+              : "rgba(255,255,255,50%)",
+          "--glow-opacity":
+            focusedLight && focusedLight.on && focusedLight.reachable ? focusedLight.color.bri : 0,
         }}>
-        {focusedLight && focusedLight.on ? <LightbulbOnIcon /> : <LightbulbOffIcon />}
+        <LightbulbIcon
+          on={focusedLight?.on ?? false}
+          reachable={focusedLight?.reachable ?? false}
+        />
       </div>
       <div className={styles["details"]}>
         <div className={styles["details__top-bar"]}>

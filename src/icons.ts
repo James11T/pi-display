@@ -16,6 +16,7 @@ export { ReactComponent as FourIcon } from "./assets/icons/four.svg";
 export { ReactComponent as FiveIcon } from "./assets/icons/five.svg";
 export { ReactComponent as LightbulbOffIcon } from "./assets/icons/lightbulb_off.svg";
 export { ReactComponent as LightbulbOnIcon } from "./assets/icons/lightbulb_on.svg";
+export { ReactComponent as LightbulbDisabledIcon } from "./assets/icons/lightbulb_disabled.svg";
 export { ReactComponent as MoonIcon } from "./assets/icons/moon.svg";
 export { ReactComponent as PinIcon } from "./assets/icons/pin.svg";
 export { ReactComponent as SpaIcon } from "./assets/icons/spa.svg";
