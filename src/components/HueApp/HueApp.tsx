@@ -7,6 +7,7 @@ import ColorWheel from "../ColorWheel/ColorWheel";
 import LongPressButton from "../LongPressButton/LongPressButton";
 import styles from "./HueApp.module.scss";
 import Select from "../Select/Select";
+import CONFIG from "../../config";
 
 interface ButtonRowProps {
   presets: LightingPreset[];
@@ -33,7 +34,9 @@ const ButtonRow = ({ presets, onSelectPreset, onSavePreset }: ButtonRowProps) =>
 };
 
 const HueApp = () => {
-  const [focusedLightId, setFocusedLightId] = React.useState<string | undefined>("2");
+  const [focusedLightId, setFocusedLightId] = React.useState<number | undefined>(
+    CONFIG.hue.preferredLight
+  );
   const hue = useHue(focusedLightId);
   const [presets, setPreset] = usePresets();
 
@@ -85,6 +88,7 @@ const HueApp = () => {
         <div className={styles["details__top-bar"]}>
           <Select
             values={hue.lights.map((light) => ({ name: light.name, value: light.id }))}
+            defaultValue={focusedLightId}
             onChange={(newTarget) => setFocusedLightId(newTarget)}
           />
         </div>

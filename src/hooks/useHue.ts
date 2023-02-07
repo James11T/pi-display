@@ -13,10 +13,10 @@ interface Light {
   color: LightColor;
   on: boolean;
   reachable: boolean;
-  id: string;
+  id: number;
 }
 
-const hueLightToLight = (light: HueLight, id: string) => ({
+const hueLightToLight = (light: HueLight, id: number) => ({
   name: light.name,
   color: LightColor.fromHue(light.state.hue, light.state.sat, light.state.bri),
   on: light.state.on,
@@ -24,7 +24,7 @@ const hueLightToLight = (light: HueLight, id: string) => ({
   id,
 });
 
-const useHue = (focusedLight?: string) => {
+const useHue = (focusedLight?: number) => {
   const [lights, setLights] = React.useState<Light[]>([]);
   const updateTimeoutID = React.useRef<number | undefined>(undefined);
   const lastLocalChange = React.useRef<Date>(new Date(0));
@@ -38,7 +38,7 @@ const useHue = (focusedLight?: string) => {
   };
 
   // Fetch a single light state from Hue API
-  const getLight = React.useCallback(async (id: string) => {
+  const getLight = React.useCallback(async (id: number) => {
     const res = await fetch(`${baseUrl}/lights/${id}`);
     if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
     const data: HueLight = await res.json();
@@ -48,7 +48,7 @@ const useHue = (focusedLight?: string) => {
   // Set a single remote light state with Hue API
   const dispatchSetLight = useDebounce(
     React.useCallback(
-      async (id: string, color: LightColor, on = true) =>
+      async (id: number, color: LightColor, on = true) =>
         await fetch(`${baseUrl}/lights/${id}/state`, {
           method: "PUT",
           headers: {
@@ -67,7 +67,7 @@ const useHue = (focusedLight?: string) => {
   // Set the local state for a light
   // Calls debounced API fetch
   const setLight = React.useCallback(
-    async (id: string, color: LightColor, on = true) => {
+    async (id: number, color: LightColor, on = true) => {
       lastLocalChange.current = new Date();
       setLights((old) =>
         old.map((light) => {
@@ -83,7 +83,7 @@ const useHue = (focusedLight?: string) => {
 
   // Fetch and store the current state of a single light
   const updateLight = React.useCallback(
-    async (id: string) => {
+    async (id: number) => {
       const updatedLight = await getLight(id);
 
       setLights((old) =>
@@ -100,7 +100,9 @@ const useHue = (focusedLight?: string) => {
   const updateLights = React.useCallback(async () => {
     const lights = await getLights();
 
-    setLights(Object.keys(lights).map((lightId) => hueLightToLight(lights[lightId], lightId)));
+    setLights(
+      Object.keys(lights).map((lightId) => hueLightToLight(lights[lightId], Number(lightId)))
+    );
   }, []);
 
   // Run to update light states

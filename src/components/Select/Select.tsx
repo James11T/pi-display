@@ -8,11 +8,12 @@ interface SelectProps<T> {
     name: string;
     value: T;
   }[];
+  defaultValue?: T;
   onChange?: (value: T) => void;
 }
 
-const Select = <T extends string | number>({ values, onChange }: SelectProps<T>) => {
-  const [currentValue, setCurrentValue] = React.useState<T | undefined>(undefined);
+const Select = <T extends string | number>({ values, defaultValue, onChange }: SelectProps<T>) => {
+  const [currentValue, setCurrentValue] = React.useState<T | undefined>(defaultValue);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleSetValue = (value: T) => {
