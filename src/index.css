@@ -4,9 +4,14 @@
   src: url("/Montserrat.ttf") format("truetype");
 }
 
+:root {
+  color-scheme: dark;
+}
+
 html {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   color: white;
+  color-scheme: dark;
 }
 
 body {

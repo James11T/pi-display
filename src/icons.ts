@@ -23,3 +23,4 @@ export { ReactComponent as SunIcon } from "./assets/icons/sun.svg";
 export { ReactComponent as FocusIcon } from "./assets/icons/focus.svg";
 export { ReactComponent as SpotifyIcon } from "./assets/icons/spotify.svg";
 export { ReactComponent as DiscordIcon } from "./assets/icons/discord.svg";
+export { ReactComponent as DownArrowIcon } from "./assets/icons/down_arrow.svg";

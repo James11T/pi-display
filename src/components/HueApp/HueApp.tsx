@@ -6,6 +6,7 @@ import { LightbulbOffIcon, LightbulbOnIcon } from "../../icons";
 import ColorWheel from "../ColorWheel/ColorWheel";
 import LongPressButton from "../LongPressButton/LongPressButton";
 import styles from "./HueApp.module.scss";
+import Select from "../Select/Select";
 
 interface ButtonRowProps {
   presets: LightingPreset[];
@@ -82,7 +83,10 @@ const HueApp = () => {
       </div>
       <div className={styles["details"]}>
         <div className={styles["details__top-bar"]}>
-          <h1>{focusedLight?.name ?? " "}</h1>
+          <Select
+            values={hue.lights.map((light) => ({ name: light.name, value: light.id }))}
+            onChange={(newTarget) => setFocusedLightId(newTarget)}
+          />
         </div>
         <div className={styles["presets"]}>
           <ButtonRow
