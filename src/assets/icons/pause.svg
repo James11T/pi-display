@@ -1,4 +1,1 @@
-<svg height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
-   <path d="M0 0h24v24H0z" fill="none" />
-   <path d="M 2,24 H 8.6666665 V 0 H 2 Z M 15.333333,0 V 24 H 22 V 0 Z" />
-</svg>
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M2 24h6.667V0H2ZM15.333 0v24H22V0Z"/></svg>

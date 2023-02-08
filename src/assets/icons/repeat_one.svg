@@ -1,5 +1,1 @@
-<svg height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
-   <path d="M0 0h24v24H0z" fill="none" />
-   <path
-      d="m 6,6.0000001 h 12 v 3.6 L 22.8,4.8 18,0 V 3.6000001 H 3.6 V 10.8 H 6 Z M 18,18 H 6 V 14.400001 L 1.2,19.2 6,24 V 20.4 H 20.4 V 13.2 H 18 Z M 13.200001,15.6 V 8.4000001 H 12 l -2.3999999,1.2 V 10.8 H 11.4 v 4.8 z" />
-</svg>
+<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M6 6h12v3.6l4.8-4.8L18 0v3.6H3.6v7.2H6Zm12 12H6v-3.6l-4.8 4.8L6 24v-3.6h14.4v-7.2H18Zm-4.8-2.4V8.4H12L9.6 9.6v1.2h1.8v4.8z"/></svg>
