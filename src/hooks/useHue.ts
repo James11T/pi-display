@@ -1,7 +1,7 @@
 import React from "react";
 import LightColor from "../color";
 import CONFIG from "../config";
-import { HueLight } from "./HueTypes";
+import { HueColorLight } from "./HueTypes";
 import useDebounce from "./useDebounce";
 
 const { VITE_BRIDGE_URL, VITE_BRIDGE_USERNAME } = import.meta.env;
@@ -16,7 +16,7 @@ interface Light {
   id: number;
 }
 
-const hueLightToLight = (light: HueLight, id: number) => ({
+const hueLightToLight = (light: HueColorLight, id: number) => ({
   name: light.name,
   color: LightColor.fromHue(light.state.hue, light.state.sat, light.state.bri),
   on: light.state.on,
@@ -33,7 +33,7 @@ const useHue = (focusedLight?: number) => {
   const getLights = async () => {
     const res = await fetch(`${baseUrl}/lights`);
     if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
-    const data: Record<string, HueLight> = await res.json();
+    const data: Record<string, HueColorLight> = await res.json();
     return data;
   };
 
@@ -41,7 +41,7 @@ const useHue = (focusedLight?: number) => {
   const getLight = React.useCallback(async (id: number) => {
     const res = await fetch(`${baseUrl}/lights/${id}`);
     if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
-    const data: HueLight = await res.json();
+    const data: HueColorLight = await res.json();
     return data;
   }, []);
 
