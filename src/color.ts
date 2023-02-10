@@ -52,6 +52,10 @@ class LightColor {
       bri / HUE_BRI_RANGE
     );
   }
+
+  static fromDimmableHue(bri: number) {
+    return LightColor.fromHue(0, 24.5, bri);
+  }
 }
 
 export default LightColor;

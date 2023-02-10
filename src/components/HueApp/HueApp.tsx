@@ -1,8 +1,8 @@
 import LightColor from "../../color";
 import React from "react";
-import useHue from "../../hooks/useHue";
+import useHue, { Focus } from "../../hooks/useHue";
 import usePresets, { LightingPreset, PresetID } from "../../hooks/usePresets";
-import { LightbulbOffIcon, LightbulbOnIcon, LightbulbDisabledIcon } from "../../icons";
+import { LightbulbUnknownIcon } from "../../icons";
 import ColorWheel from "../ColorWheel/ColorWheel";
 import LongPressButton from "../LongPressButton/LongPressButton";
 import styles from "./HueApp.module.scss";
@@ -33,36 +33,17 @@ const ButtonRow = ({ presets, onSelectPreset, onSavePreset }: ButtonRowProps) =>
   );
 };
 
-interface LightbulbIconProps {
-  on: boolean;
-  reachable: boolean;
-}
-
-const LightbulbIcon = ({ on, reachable }: LightbulbIconProps) => {
-  if (!reachable) return <LightbulbDisabledIcon />;
-  if (on) {
-    return <LightbulbOnIcon />;
-  } else {
-    return <LightbulbOffIcon />;
-  }
-};
-
 const HueApp = () => {
-  const [focusedLightId, setFocusedLightId] = React.useState<number | undefined>(
-    CONFIG.hue.preferredLight
-  );
-  const hue = useHue(focusedLightId);
+  const [focus, setFocus] = React.useState<Focus | undefined>(CONFIG.hue.defaultEntity);
+  const hue = useHue(focus);
   const [presets, setPreset] = usePresets();
-
-  const focusedLight = hue.lights.find((light) => light.id === focusedLightId);
 
   const handleNewColor = React.useCallback(
     (newColor: LightColor) => {
-      if (!focusedLight?.id) return;
-      hue.setLight(focusedLight.id, newColor, true);
+      hue.updateFocusedEntity(newColor, true);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [focusedLight?.id, hue.setLight]
+    [hue.updateFocusedEntity]
   );
 
   const handleNewPreset = React.useCallback(
@@ -74,17 +55,28 @@ const HueApp = () => {
   );
 
   const handleSavePreset = React.useCallback(
-    (presetId: PresetID) => {
-      if (!focusedLight?.color) return;
-      setPreset(presetId, focusedLight.color);
+    (presetId: PresetID, color: LightColor) => {
+      setPreset(presetId, color);
     },
-    [focusedLight?.color, setPreset]
+    [setPreset]
   );
 
   const handleToggleOn = () => {
-    if (!focusedLight) return;
-    hue.setLight(focusedLight.id, focusedLight.color, !focusedLight.on);
+    if (!hue.currentEntity) return;
+    hue.updateFocusedEntity(hue.currentEntity.color, !hue.currentEntity.on);
   };
+
+  const selectables = hue.entities
+    .sort((a, b) => hue.evaluateEntity(b) - hue.evaluateEntity(a))
+    .map((entity) => ({
+      name: entity.name,
+      value: {
+        id: entity.id,
+        type: entity.type,
+      },
+      disabled: !entity.reachable,
+      icon: hue.getEntityIcon(entity),
+    }));
 
   return (
     <div className={styles["app"]}>
@@ -93,40 +85,50 @@ const HueApp = () => {
         onClick={handleToggleOn}
         style={{
           "--color":
-            focusedLight && focusedLight.on && focusedLight.reachable
-              ? focusedLight.color.css()
+            hue.currentEntity && hue.currentEntity.on && hue.currentEntity.reachable
+              ? hue.currentEntity.color.css()
               : "rgba(255,255,255,50%)",
           "--glow-opacity":
-            focusedLight && focusedLight.on && focusedLight.reachable ? focusedLight.color.bri : 0,
+            hue.currentEntity && hue.currentEntity.on && hue.currentEntity.reachable
+              ? hue.currentEntity.color.bri
+              : 0,
         }}>
-        <LightbulbIcon
-          on={focusedLight?.on ?? false}
-          reachable={focusedLight?.reachable ?? false}
-        />
+        {hue.currentEntityIcon ? <hue.currentEntityIcon /> : <LightbulbUnknownIcon />}
       </div>
       <div className={styles["details"]}>
         <div className={styles["details__top-bar"]}>
           <Select
-            values={hue.lights.map((light) => ({ name: light.name, value: light.id }))}
-            defaultValue={focusedLightId}
-            onChange={(newTarget) => setFocusedLightId(newTarget)}
+            values={selectables}
+            value={
+              focus
+                ? selectables.find(
+                    (selectable) =>
+                      selectable.value.type === focus?.type && selectable.value.id === focus?.id
+                  )?.value
+                : undefined
+            }
+            onChange={(newFocus) => setFocus(newFocus as Focus)} //! TODO: Support groups
           />
         </div>
         <div className={styles["presets"]}>
           <ButtonRow
             presets={presets.slice(0, 5)}
             onSelectPreset={handleNewPreset}
-            onSavePreset={handleSavePreset}
+            onSavePreset={(presetId: string) =>
+              hue.currentEntity && handleSavePreset(presetId, hue.currentEntity.color)
+            }
           />
           <ButtonRow
             presets={presets.slice(5)}
             onSelectPreset={handleNewPreset}
-            onSavePreset={handleSavePreset}
+            onSavePreset={(presetId: string) =>
+              hue.currentEntity && handleSavePreset(presetId, hue.currentEntity.color)
+            }
           />
         </div>
       </div>
       <ColorWheel
-        color={focusedLight ? focusedLight.color : new LightColor(0, 0, 100)}
+        color={hue.currentEntity ? hue.currentEntity.color : new LightColor(0, 0, 100)}
         onColorChange={handleNewColor}
       />
     </div>

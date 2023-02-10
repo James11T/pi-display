@@ -15,7 +15,7 @@ const getAccessTokens = async (authToken: string) => {
       client_id: VITE_SPOTIFY_CLIENT_ID,
       client_secret: VITE_SPOTIFY_CLIENT_SECRET,
     },
-    contentType: "application/x-www-form-urlencoded",
+    contentType: "encodedForm",
     headers: {
       "User-Agent": "spotipi-dash",
     },
@@ -34,7 +34,7 @@ const refreshAccessTokens = async (refreshToken: string) => {
         client_id: VITE_SPOTIFY_CLIENT_ID,
         client_secret: VITE_SPOTIFY_CLIENT_SECRET,
       },
-      contentType: "application/x-www-form-urlencoded",
+      contentType: "encodedForm",
       headers: {
         "User-Agent": "spotipi-dash",
       },

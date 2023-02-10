@@ -1,16 +1,21 @@
 interface HueStateDimmable {
   on: boolean;
+  hue: undefined;
+  sat: undefined;
   bri: number;
   alert: string;
 }
 
-interface HueStateColor extends HueStateDimmable {
+interface HueStateColor {
+  on: boolean;
   hue: number;
   sat: number;
+  bri: number;
   effect: string;
   xy: [number, number];
   ct: number;
   colormode: string;
+  alert: string;
 }
 
 type HueState = HueStateDimmable | HueStateColor;
@@ -102,6 +107,7 @@ type HueColorLightGroup = HueLightGroupBase<HueStateColor>;
 type HueLightGroup = HueDimmableLightGroup | HueColorLightGroup;
 
 export type {
+  HueState,
   HueColorLight,
   HueDimmableLight,
   HueLight,

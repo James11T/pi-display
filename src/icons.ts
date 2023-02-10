@@ -25,3 +25,7 @@ export { ReactComponent as FocusIcon } from "./assets/icons/focus.svg";
 export { ReactComponent as SpotifyIcon } from "./assets/icons/spotify.svg";
 export { ReactComponent as DiscordIcon } from "./assets/icons/discord.svg";
 export { ReactComponent as DownArrowIcon } from "./assets/icons/down_arrow.svg";
+export { ReactComponent as LightGroupOnIcon } from "./assets/icons/light_group_on.svg";
+export { ReactComponent as LightGroupOffIcon } from "./assets/icons/light_group_off.svg";
+export { ReactComponent as LightGroupDisabledIcon } from "./assets/icons/light_group_disabled.svg";
+export { ReactComponent as LightbulbUnknownIcon } from "./assets/icons/lightbulb_unknown.svg";

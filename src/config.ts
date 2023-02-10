@@ -6,7 +6,10 @@ interface Config {
     refreshInterval: number | undefined;
     updateDebounce: number;
     changingGrace: number; // If the color was manually changed within Xms then delay update by Xms
-    preferredLight: number | undefined; // Default to this
+    defaultEntity?: {
+      id: number;
+      type: "light" | "group";
+    };
   };
   longPressTime: number;
 }
@@ -18,8 +21,11 @@ const CONFIG: Config = {
   hue: {
     refreshInterval: 2_000,
     updateDebounce: 500,
-    changingGrace: 500,
-    preferredLight: 2,
+    changingGrace: 10_000,
+    defaultEntity: {
+      type: "group",
+      id: 3,
+    },
   },
   longPressTime: 500,
 };

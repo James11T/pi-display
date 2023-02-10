@@ -3,10 +3,15 @@ import { HTTPError } from "./apiError";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
+const CONTENT_TYPES = {
+  json: "application/json",
+  encodedForm: "application/x-www-form-urlencoded",
+} as const;
+
 interface RequestOptions extends Omit<RequestInit, "method"> {
   accessToken?: string;
   body?: any;
-  contentType?: "application/json" | "application/x-www-form-urlencoded";
+  contentType?: keyof typeof CONTENT_TYPES;
 }
 
 const APIFetch = async <T>(
@@ -16,9 +21,9 @@ const APIFetch = async <T>(
 ): Promise<T> => {
   let encodedBody: any;
   if (options.body && options.contentType) {
-    if (options.contentType === "application/json") {
+    if (options.contentType === "json") {
       encodedBody = JSON.stringify(options.body);
-    } else if (options.contentType === "application/x-www-form-urlencoded") {
+    } else if (options.contentType === "encodedForm") {
       encodedBody = qs.stringify(options.body);
     }
   } else if (options.body) {
@@ -30,7 +35,7 @@ const APIFetch = async <T>(
     headers: {
       ...options.headers,
       ...(options.accessToken && { Authorization: `Bearer ${options.accessToken}` }),
-      ...(options.contentType && { "Content-Type": options.contentType }),
+      ...(options.contentType && { "Content-Type": CONTENT_TYPES[options.contentType] }),
     },
     body: encodedBody,
     method,

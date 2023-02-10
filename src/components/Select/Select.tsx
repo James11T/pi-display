@@ -7,22 +7,22 @@ interface SelectProps<T> {
   values: {
     name: string;
     value: T;
+    disabled?: boolean;
+    icon?: React.FC;
   }[];
-  defaultValue?: T;
+  value?: T;
   onChange?: (value: T) => void;
 }
 
-const Select = <T extends string | number>({ values, defaultValue, onChange }: SelectProps<T>) => {
-  const [currentValue, setCurrentValue] = React.useState<T | undefined>(defaultValue);
+const Select = <T,>({ values, value, onChange }: SelectProps<T>) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleSetValue = (value: T) => {
     setIsOpen(false);
-    setCurrentValue(value);
     onChange && onChange(value);
   };
 
-  const currentValueData = values.find((v) => v.value === currentValue);
+  const currentValueData = values.find((v) => v.value === value);
 
   return (
     <div className={cn(styles["select"], isOpen && styles["select--open"])}>
@@ -33,7 +33,10 @@ const Select = <T extends string | number>({ values, defaultValue, onChange }: S
       <ul className={styles["select__value-list"]}>
         {values.map((value) => (
           <li key={value.name}>
-            <button onClick={() => handleSetValue(value.value)}>{value.name}</button>
+            <button onClick={() => handleSetValue(value.value)} disabled={value.disabled}>
+              {value.icon && <value.icon />}
+              {value.name}
+            </button>
           </li>
         ))}
       </ul>
@@ -42,3 +45,4 @@ const Select = <T extends string | number>({ values, defaultValue, onChange }: S
 };
 
 export default Select;
+export type { SelectProps };
