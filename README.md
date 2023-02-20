@@ -14,7 +14,7 @@ The app polls the Spotify API once every second to provide live updates but paus
 
 ### Hue
 
-The app, similarly, polls the Hue API at a regular interval and too has a temporary pause.
+The app, similarly, polls the Hue API at a regular interval and it too has a temporary pause.
 
 ### Hardware
 
